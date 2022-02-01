@@ -1,7 +1,7 @@
-import Head from 'next/head'
-import '../styles/globals.css'
+import Head from "next/head";
+import React from "react";
 
-export default function MyApp({ Component, pageProps }) {
+export default function MainLayout({ children }) {
   return (
     <>
       <Head>
@@ -31,7 +31,8 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
       </Head>
-      <Component {...pageProps} />
+
+      <main>{children}</main>
     </>
-  )
+  );
 }
