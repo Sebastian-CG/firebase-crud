@@ -1,9 +1,21 @@
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function MainLayout({ children }) {
   const { user, accountSignOut } = useContext(AuthContext);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const prefersColorScheme = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (prefersColorScheme) {
+      document.documentElement.classList.add("dark");
+      setDarkMode(true);
+    }
+  }, []);
 
   const handleSingOut = async () => {
     try {
@@ -11,6 +23,11 @@ export default function MainLayout({ children }) {
     } catch (error) {
       console.warn(error);
     }
+  };
+
+  const handleChangeTheme = () => {
+    document.documentElement.classList.toggle("dark");
+    setDarkMode(!darkMode);
   };
 
   return (
@@ -40,32 +57,46 @@ export default function MainLayout({ children }) {
           sizes="32x32"
         />
         {/* <link rel="apple-touch-icon" href="/apple-icon.png" /> */}
-        <meta name="theme-color" content="#4585F3" />
+        <meta name="theme-color" content={darkMode ? "#3067E8" : "#4585F3"} />
       </Head>
 
-      {user && (
-        <header className="h-16 px-5 bg-slate-200">
-          <div className="flex items-center justify-between w-full h-full max-w-4xl m-auto">
-            <div>
-              <h1>CRUD</h1>
+      <div className="bg-slate-100 dark:bg-slate-800">
+        {user && (
+          <header className="sticky top-0 z-10 h-16 px-5 backdrop-blur-md bg-slate-200/50 dark:text-slate-100 dark:bg-slate-900/80">
+            <div className="flex items-center justify-between w-full h-full max-w-4xl m-auto">
+              <div>
+                <h1 className="text-2xl font-bold tracking-widest text-slate-700 dark:text-slate-200">
+                  📚 CRUD
+                </h1>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  className="w-10 h-10 p-1 rounded-full bg-slate-100 dark:bg-slate-800"
+                  onClick={handleChangeTheme}
+                >
+                  {darkMode ? "☀" : "🌙"}
+                </button>
+
+                <button
+                  onClick={handleSingOut}
+                  className="w-10 h-10 p-1 rounded-full bg-slate-100 dark:bg-slate-800"
+                >
+                  <picture className="rounded-full bg-slate-200">
+                    <img
+                      className="rounded-full"
+                      src={user.photoURL || "/user.png"}
+                      alt=""
+                    />
+                  </picture>
+                </button>
+              </div>
             </div>
+          </header>
+        )}
 
-            <button
-              onClick={handleSingOut}
-              className="grid grid-cols-[2rem_6.25rem] grid-rows-[2rem] items-center gap-3 p-1 w-40 rounded-full bg-slate-100"
-            >
-              <picture className="h-full overflow-hidden rounded-full bg-slate-200">
-                <img src={user.photoURL} alt="" />
-              </picture>
-              <span className="overflow-hidden font-semibold text-md text-slate-400 whitespace-nowrap text-ellipsis">
-                {user.displayName || user.email}
-              </span>
-            </button>
-          </div>
-        </header>
-      )}
-
-      <main className="min-h-screen bg-slate-100">{children}</main>
+        <main>{children}</main>
+      </div>
     </>
   );
 }

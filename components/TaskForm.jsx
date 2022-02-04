@@ -39,7 +39,7 @@ export default function TaskForm({ noteToEdit, closeModal }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-5 rounded-lg bg-slate-50 text-slate-900 w-80"
+      className="p-5 rounded-lg bg-slate-50 text-slate-900 w-80 dark:bg-slate-900"
     >
       <label
         className="block font-semibold uppercase text-slate-300"
@@ -48,13 +48,14 @@ export default function TaskForm({ noteToEdit, closeModal }) {
         title
       </label>
       <input
-        className="w-full p-3 mb-4 h-[3.125rem] rounded-lg border-[1px] border-slate-300 focus:border-blue-500 outline-none placeholder:text-slate-300"
+        className="w-full p-3 mb-4 h-[3.125rem] rounded-lg border-[1px] border-slate-300 focus:border-blue-500 outline-none placeholder:text-slate-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
         type="text"
         id="title"
         name="title"
         placeholder="..."
         value={currentTask.title}
         onChange={handleChange}
+        required
       />
 
       <label
@@ -64,7 +65,7 @@ export default function TaskForm({ noteToEdit, closeModal }) {
         description
       </label>
       <textarea
-        className="w-full h-20 p-3 rounded-lg border-[1px] resize-none border-slate-300 focus:border-blue-500 outline-none placeholder:text-slate-300"
+        className="w-full h-20 p-3 rounded-lg border-[1px] resize-none border-slate-300 focus:border-blue-500 outline-none placeholder:text-slate-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
         type="text"
         id="description"
         name="description"

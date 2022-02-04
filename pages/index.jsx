@@ -32,7 +32,7 @@ export default function index() {
           <button
             title="Create new Note"
             onClick={toggleModal}
-            className="sticky flex items-center gap-3 px-4 py-2 text-white bg-blue-500 rounded-full shadow-lg shadow-blue-300 bottom-3 left-3"
+            className="sticky flex items-center gap-3 px-4 py-2 text-white bg-blue-500 rounded-full shadow-lg dark:bg-blue-600 shadow-blue-300 bottom-3 left-3 dark:shadow-blue-800"
           >
             <FaPlus />
             <span className="font-semibold">Create new note</span>
