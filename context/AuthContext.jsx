@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
 } from "firebase/auth";
@@ -49,6 +50,11 @@ export default function AuthProvider({ children }) {
       message:
         "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.",
     },
+    {
+      code: "Firebase: Error (auth/account-exists-with-different-credential).",
+      message:
+        "An account with the same email address already exists. Please try logging in with another provider associated with this email address.",
+    },
   ];
 
   // Register user with email and password
@@ -61,24 +67,31 @@ export default function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // accountSignOut
-  const accountSignOut = () => signOut(auth);
-
   // Login with google
   const signInWithGoogle = () => {
     const googleProvider = new GoogleAuthProvider();
     return signInWithPopup(auth, googleProvider);
   };
 
+  // Login with github
+  const signInWithGithub = () => {
+    const githubProvider = new GithubAuthProvider();
+    return signInWithPopup(auth, githubProvider);
+  };
+
+  // accountSignOut
+  const accountSignOut = () => signOut(auth);
+
+  // send password reset email
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
+  // Transform error message to user friendly message
   const findErrorMessage = (msg) => {
     let errorMessage = errorMessages.find((error) => error.code === msg);
 
     if (!errorMessage)
       errorMessage = {
-        message:
-          "Oops... an error occurred, check that everything is spelled correctly",
+        message: "Oops... an error occurred",
       };
 
     return errorMessage.message;
@@ -112,8 +125,9 @@ export default function AuthProvider({ children }) {
         loadingUser,
         signUp,
         signIn,
-        accountSignOut,
         signInWithGoogle,
+        signInWithGithub,
+        accountSignOut,
         resetPassword,
         findErrorMessage,
       }}

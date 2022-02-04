@@ -28,10 +28,6 @@ export default function DataProvider({ children }) {
 
   // onSnapshot : used to listen to changes in the collection
   const onSnapshotNotes = () => {
-    console.log("---------------------------");
-    console.log("onSnapshotNotes");
-    console.log("---------------------------");
-
     onSnapshot(collection(db, userUID), (querySnapshot) => {
       const tasks = [];
       querySnapshot.forEach((doc) => {

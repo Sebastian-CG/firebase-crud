@@ -1,10 +1,12 @@
 import { useContext, useState } from "react";
 import { DataContext } from "../context/DataContext";
 import Button from "./Button";
+import { FaSave } from "react-icons/fa";
 
 export default function TaskForm({ noteToEdit, closeModal }) {
   const editMode = noteToEdit ? true : false;
   const { addTask, updateTask } = useContext(DataContext);
+  const [loading, setLoading] = useState(false);
   const [currentTask, setCurrentTask] = useState({
     title: noteToEdit?.title || "",
     description: noteToEdit?.description || "",
@@ -15,6 +17,7 @@ export default function TaskForm({ noteToEdit, closeModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const newTask = {
       title: currentTask.title,
@@ -29,6 +32,7 @@ export default function TaskForm({ noteToEdit, closeModal }) {
       console.warn(error);
     }
 
+    setLoading(false);
     closeModal();
   };
 
@@ -69,13 +73,16 @@ export default function TaskForm({ noteToEdit, closeModal }) {
         onChange={handleChange}
       />
 
-      <Button
-        className="w-full h-10 text-white bg-blue-500 rounded-lg"
-        type="submit"
-        loading={false}
-      >
-        Save
-      </Button>
+      <div className="flex justify-end mt-3">
+        <Button
+          className="flex items-center justify-center h-10 gap-2 px-4 text-white bg-blue-500 rounded-lg"
+          type="submit"
+          loading={loading}
+        >
+          <FaSave />
+          Save
+        </Button>
+      </div>
     </form>
   );
 }

@@ -3,10 +3,17 @@ import { AuthContext } from "../context/AuthContext";
 import Google from "../components/icons/Google";
 import Button from "../components/Button";
 import Alert from "../components/icons/Alert";
+import GitHub from "../components/icons/GitHub";
 
 export default function Login() {
-  const { signUp, signIn, signInWithGoogle, resetPassword, findErrorMessage } =
-    useContext(AuthContext);
+  const {
+    signUp,
+    signIn,
+    signInWithGoogle,
+    signInWithGithub,
+    resetPassword,
+    findErrorMessage,
+  } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -38,13 +45,12 @@ export default function Login() {
 
   const handleResetPassword = async () => {
     const { email } = newUser;
-
     if (!email) return setError("Please enter your email");
 
     try {
       await resetPassword(email);
       setError(
-        `Se envio un correo a (${email}) con instrucciones para restablecer tu contraseña`
+        `An email was sent to (${email}) with instructions to reset your password.`
       );
     } catch ({ message }) {
       setError(findErrorMessage(message));
@@ -59,10 +65,18 @@ export default function Login() {
     }
   };
 
+  const handleSignInWithGithub = async () => {
+    try {
+      await signInWithGithub();
+    } catch ({ message }) {
+      setError(findErrorMessage(message));
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="grid w-11/12 max-w-sm gap-8">
-        {/* Formulario */}
+        {/* Form */}
         <div className="p-8 bg-white rounded-lg">
           <h1 className="mb-8 text-2xl font-semibold leading-7 text-slate-400">
             {isSignIn && (
@@ -137,7 +151,7 @@ export default function Login() {
           </button>
         </div>
 
-        {/* Botones de LogIn */}
+        {/* Login Buttons */}
         <div className="grid w-full gap-3">
           <button
             onClick={handleSignInWithGoogle}
@@ -145,6 +159,13 @@ export default function Login() {
           >
             <Google />
             <span className="ml-2">Google</span>
+          </button>
+          <button
+            onClick={handleSignInWithGithub}
+            className="flex items-center justify-center w-full bg-white h-[3.125rem] rounded-lg"
+          >
+            <GitHub />
+            <span className="ml-2">GitHub</span>
           </button>
         </div>
       </div>
